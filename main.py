@@ -7,8 +7,7 @@ import discord
 from discord.ui import Button, View
 from discord.ext import commands
 import asyncio
-from config import TOKEN #use any file to store personal token
-
+from config import TOKEN  # use any file to store personal token
 
 HEAD_FILLER = "\n|" + "=" * 25 + "|"
 FILLER = "\n+" + "-" * 25 + "+"
@@ -32,6 +31,7 @@ async def hello(ctx: commands.Context):
     await ctx.send("Hey!")
 
 
+# view contents and properties of sent message
 @bot.command()
 async def view_params(ctx: commands.Context, *args):
     if ctx.message.author.guild_permissions.administrator:
@@ -43,6 +43,7 @@ async def view_params(ctx: commands.Context, *args):
         await ctx.send(f"Admin?:\n{str(ctx.message.author.guild_permissions.administrator)}{FILLER}")
 
 
+# view basic statistics of name given in [*args] if user of such name is present in server
 @bot.command()
 async def stats(ctx: commands.Context, *args):
     person_arg = args[0] if len(args) == 1 else ""
@@ -76,17 +77,3 @@ def find_person(server, person_name):
 
 
 bot.run(TOKEN)  # run the bot with the token
-
-
-
-
-
-
-
-
-
-
-
-
-
-
