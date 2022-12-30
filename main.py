@@ -62,6 +62,27 @@ async def stats(ctx: commands.Context, *args):
                 await ctx.send(f"Highest Role: {str(found_person.top_role.name.replace('@', ''))}{FILLER}")
 
 
+@bot.command()
+async def giverole(ctx: commands.Context, member: discord.Member, role: discord.Role):
+    if not ctx.message.author.guild_permissions.administrator:
+        await ctx.send("Must be administrator to use this command")
+    await member.add_roles(role)
+
+
+@bot.command()
+async def removerole(ctx: commands.Context, member: discord.Member, role: discord.Role):
+    if not ctx.message.author.guild_permissions.administrator:
+        await ctx.send("Must be administrator to use this command")
+    await member.remove_roles(role)
+
+
+def find_role(ctx, name):
+    for role in ctx.guild.roles:
+        if role.name == name:
+            return role.id
+    return ""
+
+
 def role_names(roles):
     retval = ""
     for role in roles:
