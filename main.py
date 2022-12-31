@@ -63,17 +63,31 @@ async def stats(ctx: commands.Context, *args):
 
 
 @bot.command()
+@commands.has_permissions(manage_roles=True)
 async def giverole(ctx: commands.Context, member: discord.Member, role: discord.Role):
-    if not ctx.message.author.guild_permissions.administrator:
-        await ctx.send("Must be administrator to use this command")
     await member.add_roles(role)
+    await ctx.send(f"{member.name} is now a {role.name}")
 
 
 @bot.command()
+@commands.has_permissions(manage_roles=True)
 async def removerole(ctx: commands.Context, member: discord.Member, role: discord.Role):
-    if not ctx.message.author.guild_permissions.administrator:
-        await ctx.send("Must be administrator to use this command")
     await member.remove_roles(role)
+    await ctx.send(f"{member.name} is no longer a {role.name}")
+
+
+@bot.command()
+@commands.has_permissions(kick_members=True)
+async def kick(ctx: commands.Context, member: discord.Member, reason: str):
+    await member.kick(reason=reason)
+    await ctx.send(f"Kicked [{member.name}] for {reason}")
+
+
+@bot.command()
+@commands.has_permissions(ban_members=True)
+async def ban(ctx: commands.Context, member: discord.Member, reason: str):
+    await member.ban(reason=reason)
+    await ctx.send(f"Banned [{member.name}] for {reason}")
 
 
 def find_role(ctx, name):
