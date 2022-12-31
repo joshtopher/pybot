@@ -33,33 +33,22 @@ async def hello(ctx: commands.Context):
 
 # view contents and properties of sent message
 @bot.command()
+@commands.has_permissions(administrator=True)
 async def view_params(ctx: commands.Context, *args):
-    if ctx.message.author.guild_permissions.administrator:
-        await ctx.send(f"Message:\n{str(ctx.message)}{FILLER}")
-        await ctx.send(f"Message components:\n{str(ctx.message.components)}{FILLER}")
-        await ctx.send(f"Arguments:\n{str(args)}{FILLER}")
-        await ctx.send(f"Author:\n{str(ctx.message.author)}{FILLER}")
-        await ctx.send(f"Author Permissions:\n{str(ctx.message.author.guild_permissions)}{FILLER}")
-        await ctx.send(f"Admin?:\n{str(ctx.message.author.guild_permissions.administrator)}{FILLER}")
+    await ctx.send(f"Message:\n{str(ctx.message)}{FILLER}")
+    await ctx.send(f"Message components:\n{str(ctx.message.components)}{FILLER}")
+    await ctx.send(f"Arguments:\n{str(args)}{FILLER}")
+    await ctx.send(f"Author:\n{str(ctx.message.author)}{FILLER}")
+    await ctx.send(f"Author Permissions:\n{str(ctx.message.author.guild_permissions)}{FILLER}")
+    await ctx.send(f"Admin?:\n{str(ctx.message.author.guild_permissions.administrator)}{FILLER}")
 
 
 # view basic statistics of name given in [*args] if user of such name is present in server
 @bot.command()
-async def stats(ctx: commands.Context, *args):
-    person_arg = args[0] if len(args) == 1 else ""
-    if not ctx.message.author.guild_permissions.administrator:
-        await ctx.send("Must be administrator to use this command")
-    else:
-        if person_arg == "":
-            await ctx.send(f"Invalid Arguments: {args}")
-        else:
-            found_person = find_person(ctx.guild, person_arg)
-            if found_person is None:
-                await ctx.send(f"User [{person_arg}] not found")
-            else:
-                await ctx.send(f"SERVER STATISTICS FOR [{person_arg}]:{HEAD_FILLER}")
-                await ctx.send(f"Roles: {role_names(found_person.roles)}{FILLER}")
-                await ctx.send(f"Highest Role: {str(found_person.top_role.name.replace('@', ''))}{FILLER}")
+async def stats(ctx: commands.Context, member: discord.Member):
+    await ctx.send(f"SERVER STATISTICS FOR [{member.name}]:{HEAD_FILLER}")
+    await ctx.send(f"Roles: {role_names(member.roles)}{FILLER}")
+    await ctx.send(f"Highest Role: {str(member.top_role.name.replace('@', ''))}{FILLER}")
 
 
 @bot.command()
@@ -90,25 +79,11 @@ async def ban(ctx: commands.Context, member: discord.Member, reason: str):
     await ctx.send(f"Banned [{member.name}] for {reason}")
 
 
-def find_role(ctx, name):
-    for role in ctx.guild.roles:
-        if role.name == name:
-            return role.id
-    return ""
-
-
 def role_names(roles):
     retval = ""
     for role in roles:
         retval += str(role.name.replace("@", "")) + ", "
     return retval[:-2]
-
-
-def find_person(server, person_name):
-    for member in server.members:
-        if member.name == person_name:
-            return member
-    return None
 
 
 bot.run(TOKEN)  # run the bot with the token
