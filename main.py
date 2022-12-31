@@ -33,7 +33,7 @@ async def view_params(ctx: commands.Context, *args):
     await ctx.send(f"Admin?:\n{str(ctx.message.author.guild_permissions.administrator)}{FILLER}")
 
 
-# view basic statistics of name given in [*args] if user of such name is present in server
+# view basic statistics of member
 @bot.command()
 async def stats(ctx: commands.Context, member: discord.Member):
     await ctx.send(f"SERVER STATISTICS FOR [{member.name}]:{HEAD_FILLER}")
@@ -41,16 +41,16 @@ async def stats(ctx: commands.Context, member: discord.Member):
     await ctx.send(f"Highest Role: {str(member.top_role.name.replace('@', ''))}{FILLER}")
 
 
-@bot.command()
+@bot.command(aliases=['giverole'])
 @commands.has_permissions(manage_roles=True)
-async def giverole(ctx: commands.Context, member: discord.Member, role: discord.Role):
+async def give_role(ctx: commands.Context, member: discord.Member, role: discord.Role):
     await member.add_roles(role)
     await ctx.send(f"{member.name} is now a {role.name}")
 
 
-@bot.command()
+@bot.command(aliases=['removerole'])
 @commands.has_permissions(manage_roles=True)
-async def removerole(ctx: commands.Context, member: discord.Member, role: discord.Role):
+async def remove_role(ctx: commands.Context, member: discord.Member, role: discord.Role):
     await member.remove_roles(role)
     await ctx.send(f"{member.name} is no longer a {role.name}")
 
