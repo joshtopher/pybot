@@ -7,13 +7,15 @@ from config import TOKEN  # use any file to store personal token
 HEAD_FILLER = "\n|" + "=" * 25 + "|"
 FILLER = "\n+" + "-" * 25 + "+"
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('?'), help_command=None, intents=intents)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('?'), help_command=commands.DefaultHelpCommand(), intents=intents)
 
 
 @bot.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send("Unknown command.")
+    else:
+        await ctx.send("Something went wrong. Please refer to '?help' to check if the command is being used properly.")
 
 
 @bot.event
