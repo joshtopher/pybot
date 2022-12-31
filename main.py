@@ -7,7 +7,8 @@ from config import TOKEN  # use any file to store personal token
 HEAD_FILLER = "\n|" + "=" * 25 + "|"
 FILLER = "\n+" + "-" * 25 + "+"
 intents = discord.Intents.all()
-bot = commands.Bot(command_prefix=commands.when_mentioned_or('?'), help_command=commands.DefaultHelpCommand(), intents=intents)
+bot = commands.Bot(command_prefix=commands.when_mentioned_or('?'),
+                   help_command=commands.DefaultHelpCommand(), intents=intents)
 
 
 @bot.event
