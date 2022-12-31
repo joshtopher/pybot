@@ -26,11 +26,6 @@ async def on_ready():
     print(f"{bot.user} is ready and online!")
 
 
-@bot.command()
-async def hello(ctx: commands.Context):
-    await ctx.send("Hey!")
-
-
 # view contents and properties of sent message
 @bot.command()
 @commands.has_permissions(administrator=True)
