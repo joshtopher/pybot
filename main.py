@@ -9,6 +9,8 @@ FILLER = "\n+" + "-" * 25 + "+"
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix=commands.when_mentioned_or('?'),
                    help_command=commands.DefaultHelpCommand(), intents=intents)
+message_id = -1
+verified_role = None
 
 
 @bot.event
@@ -70,6 +72,32 @@ async def kick(ctx: commands.Context, member: discord.Member, reason: str):
 async def ban(ctx: commands.Context, member: discord.Member, reason: str):
     await member.ban(reason=reason)
     await ctx.send(f"Banned [{member.name}] for {reason}")
+
+
+# Sets the verify message
+@bot.command(aliases=['setverify'])
+@commands.has_permissions(administrator=True)
+async def set_verify_channel(ctx: commands.Context):
+    verification_message = await ctx.channel.send("Please react to this message to verify your membership.")
+    global message_id
+    message_id = verification_message.id
+
+
+# Sets the role given when user is verified
+@bot.command(aliases=['setverifyrole'])
+@commands.has_permissions(administrator=True)
+async def set_verified_role(ctx: commands.Context, role: discord.Role):
+    global verified_role
+    verified_role = role
+    await ctx.send(f"Verified role set to {role.name}")
+
+
+#when the 'verify message' is reacted to, this function gives the 'verify role' to the user who reacted
+@bot.event
+async def on_raw_reaction_add(payload):
+    if payload.message_id != message_id:
+        return
+    await payload.member.add_roles(verified_role)
 
 
 def role_names(roles):
